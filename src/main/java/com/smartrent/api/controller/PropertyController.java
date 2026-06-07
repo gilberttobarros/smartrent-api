@@ -1,5 +1,6 @@
 package com.smartrent.api.controller;
 
+import com.smartrent.api.dto.PropertyResponseDto;
 import com.smartrent.api.entity.Property;
 import com.smartrent.api.service.PropertyService;
 import jakarta.validation.Valid;
@@ -17,17 +18,17 @@ public class PropertyController {
     }
 
     @PostMapping
-    public Property save (@Valid @RequestBody Property property){
+    public PropertyResponseDto save (@Valid @RequestBody Property property){
         return propertyService.save(property);
     }
 
     @GetMapping
-    public List<Property> findAll (){
+    public List<PropertyResponseDto> findAll (){
         return propertyService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Property findById (@PathVariable Long id){
-        return propertyService.findbyId(id);
+    public PropertyResponseDto findById (@PathVariable Long id){
+        return propertyService.findById(id);
     }
 }

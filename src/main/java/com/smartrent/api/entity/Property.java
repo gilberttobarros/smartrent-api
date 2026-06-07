@@ -12,6 +12,9 @@ import lombok.Setter;
 @Entity
 @Table(name = "property")
 public class Property {
+    @ManyToOne
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

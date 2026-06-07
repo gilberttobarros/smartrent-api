@@ -1,5 +1,7 @@
 package com.smartrent.api.service;
 
+import com.smartrent.api.dto.OwnerDto;
+import com.smartrent.api.dto.PropertyResponseDto;
 import com.smartrent.api.entity.Property;
 import com.smartrent.api.exception.ResourceNotFoundException;
 import com.smartrent.api.repository.PropertyRepository;
@@ -15,15 +17,40 @@ public class PropertyService {
         this.propertyRepository = propertyRepository;
     }
 
-    public Property save (Property property){
-        return propertyRepository.save(property);
+   public PropertyResponseDto save (Property property){
+        Property saved = propertyRepository.save(property);
+        return toDTO(saved);
+   }
+
+    public List<PropertyResponseDto> findAll (){
+        return propertyRepository.findAll().stream()
+                .map(this::toDTO)
+                .toList();
     }
 
-    public List<Property> findAll (){
-        return propertyRepository.findAll();
+    public PropertyResponseDto findById(Long id){
+        Property property = propertyRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Property not found"));
+        return toDTO(property);
     }
 
-    public Property findbyId(Long id){
-        return propertyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Property not found"));
+    private PropertyResponseDto toDTO (Property property){
+        PropertyResponseDto dto = new PropertyResponseDto();
+        dto.setId(property.getId());
+        dto.setTitle(property.getTitle());
+        dto.setDescription(property.getDescription());
+        dto.setAddress(property.getAddress());
+        dto.setCity(property.getCity());
+        dto.setPricePerMonth(property.getPricePerMonth());
+        dto.setTotalArea(property.getTotalArea());
+        dto.setRooms(property.getRooms());
+        dto.setAvailable(property.getAvailable());
+
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setId(property.getOwner().getId());
+        ownerDto.setName(property.getOwner().getName());
+        ownerDto.setEmail(property.getOwner().getEmail());
+        dto.setOwner(ownerDto);
+        return dto;
     }
 }
