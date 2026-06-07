@@ -2,6 +2,7 @@ package com.smartrent.api.controller;
 
 import com.smartrent.api.entity.User;
 import com.smartrent.api.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +22,12 @@ public class UserController {
     }
 
     @PostMapping
-    public User save (@RequestBody User user){
+    public User save (@Valid @RequestBody User user){
         return userService.save(user);
+    }
+
+    @GetMapping("/{id}")
+    public User findById (@PathVariable Long id){
+        return userService.findById(id);
     }
 }

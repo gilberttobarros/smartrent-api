@@ -1,6 +1,7 @@
 package com.smartrent.api.service;
 
 import com.smartrent.api.entity.User;
+import com.smartrent.api.exception.ResourceNotFoundException;
 import com.smartrent.api.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,11 @@ public class UserService {
 
     public List<User> findAll (){
         return userRepository.findAll();
+    }
+
+    public User findById (Long id){
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User Not Found"));
     }
 
 }
