@@ -28,6 +28,12 @@ public class PropertyService {
                 .toList();
     }
 
+    public List<PropertyResponseDto> findByCity (String city){
+        return propertyRepository.findByCity(city)
+                .stream().map(this::toDTO)
+                .toList();
+    }
+
     public PropertyResponseDto findById(Long id){
         Property property = propertyRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Property not found"));
@@ -52,5 +58,25 @@ public class PropertyService {
         ownerDto.setEmail(property.getOwner().getEmail());
         dto.setOwner(ownerDto);
         return dto;
+    }
+
+    public void delete (Long id){
+        Property property = propertyRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Property not found"));
+        propertyRepository.delete(property);
+    }
+
+    public PropertyResponseDto update (Long id, Property updated ){
+        Property property = propertyRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Property not found"));
+        property.setTitle(updated.getTitle());
+        property.setDescription(updated.getDescription());
+        property.setAddress(updated.getAddress());
+        property.setCity(updated.getCity());
+        property.setPricePerMonth(updated.getPricePerMonth());
+        property.setTotalArea(updated.getTotalArea());
+        property.setRooms(updated.getRooms());
+        property.setAvailable(updated.getAvailable());
+        return toDTO(propertyRepository.save(property));
     }
 }

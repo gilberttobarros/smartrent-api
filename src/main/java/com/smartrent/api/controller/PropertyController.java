@@ -31,4 +31,18 @@ public class PropertyController {
     public PropertyResponseDto findById (@PathVariable Long id){
         return propertyService.findById(id);
     }
+
+    @GetMapping("/search")
+    public List<PropertyResponseDto> findByCity (@RequestParam String city){
+        return propertyService.findByCity(city);
+    }
+    @DeleteMapping("/{id}")
+    public void delete (@PathVariable Long id){
+        propertyService.delete(id);
+    }
+
+    @PutMapping("/{id}")
+    public PropertyResponseDto update (@PathVariable Long id, @Valid @RequestBody Property property){
+        return propertyService.update(id, property);
+    }
 }
